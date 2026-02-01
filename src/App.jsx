@@ -32,7 +32,7 @@ const App = () => {
   };
 
   return (
-    <>
+    <div className="page">
       <Header
         title="Моё первое приложение на React"
         userName="Колян"
@@ -41,7 +41,7 @@ const App = () => {
       />
       <Main notes={notes} />
       <Footer />
-    </>
+    </div>
   );
 };
 
