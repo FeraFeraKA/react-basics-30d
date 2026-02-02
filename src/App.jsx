@@ -1,7 +1,12 @@
 import Header from "./components/Header";
-import Main from "./components/Main";
 import Footer from "./components/Footer";
 import { useState } from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import ProfilePage from "./pages/ProfilePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 const App = () => {
   const notes = [
@@ -39,7 +44,15 @@ const App = () => {
         toggleLogin={toggleLogin}
         isLoggedIn={isLoggedIn}
       />
-      <Main notes={notes} />
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage notes={notes} />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={isLoggedIn ? <ProfilePage /> : <Navigate to="/login"/>} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </main>
+
       <Footer />
     </div>
   );

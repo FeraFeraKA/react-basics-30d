@@ -25,6 +25,7 @@ button {
   border-radius: 10px;
   margin: 12px;
   padding: 12px;
+  font-size: 14px;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -35,10 +36,37 @@ button {
   }
 }
 
+.nav-link {
+  border: 2px solid #770e0e;
+  border-radius: 10px;
+  margin: 12px;
+  padding: 12px;
+  font-size: 14px;
+  text-decoration: none;
+  color: inherit;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &.active {
+    color: #ef3131;
+  }
+}
+
 ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+h1 {
+  text-align: center;
 }
 
 .page {
@@ -69,28 +97,36 @@ header {
 
 header > .container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  padding-block: 20px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+  @include mixins.tablet {
+    flex-direction: row;
+  }
 }
 
 header h1 {
   font-size: 20px;
 }
 
-.header_authorization {
+.header_info {
   display: flex;
+  flex-direction: column;
   align-items: center;
   text-align: center;
 }
 
-.header_authorization p {
-  font-weight: bold;
+.authorization_links {
+  display: flex;
+  gap: 20px;
 }
 
-.header_authorization button {
-  margin-right: 0;
+.authorization_links * {
+  margin: 0;
 }
 
 main {
