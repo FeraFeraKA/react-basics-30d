@@ -1,12 +1,15 @@
-const HomePage = ({ notes }) => {
+import NoteItem from "../components/NoteItem";
+
+const HomePage = ({ notes, deleteNote }) => {
   return (
     <div className="container">
       <ul className="notes">
         {notes.map((note) => (
-          <li key={note.id}>
-            <h3>{note.title}.</h3>
-            <p>Created at: {new Date(note.createdAt).getSeconds()} seconds.</p>
-          </li>
+          <NoteItem
+            key={note.id}
+            note={note}
+            deleteNote={() => deleteNote(note.id)}
+          />
         ))}
       </ul>
     </div>
