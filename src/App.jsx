@@ -13,19 +13,22 @@ const App = () => {
     return [
       {
         title: "Уборка",
-        id: 333,
+        text: "Убраться в общаге",
+        id: crypto.randomUUID(),
         createdAt: Date.now(),
         tags: [],
       },
       {
         title: "Зал",
-        id: 228,
+        text: "Сходить в зал в четверг",
+        id: crypto.randomUUID(),
         createdAt: Date.now() + 228,
         tags: [],
       },
       {
         title: "React",
-        id: 911,
+        text: "Затронуть кастомные хуки",
+        id: crypto.randomUUID(),
         createdAt: Date.now() + 911,
         tags: [],
       },
@@ -36,6 +39,8 @@ const App = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  const [editingId, setEditingId] = useState(null);
+
   const deleteNote = (id) => {
     setNotes((prevNotes) => {
       return prevNotes.filter((note) => note.id !== id);
@@ -44,12 +49,36 @@ const App = () => {
 
   const addNote = (note) => {
     setNotes((prevNotes) => {
-      return [...prevNotes, note];
+      return [note, ...prevNotes];
     });
   };
 
   const toggleLogin = () => {
     setIsLoggedIn((prev) => !prev);
+  };
+
+  const handleEdit = (id) => {
+    setEditingId(id);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+  };
+
+  const handleSave = (id, data) => {
+    setNotes((prevNotes) => 
+      prevNotes.map((note) => 
+        note.id === id
+          ? {
+              ...note,
+              ...data,
+              updatedAt: Date.now(),
+            }
+          : note
+      )
+    );
+
+    setEditingId(null)
   };
 
   return (
@@ -64,7 +93,17 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={<HomePage notes={notes} deleteNote={deleteNote} />}
+            element={
+              <HomePage
+                notes={notes}
+                deleteNote={deleteNote}
+                addNote={addNote}
+                editingId={editingId}
+                handleEdit={handleEdit}
+                handleCancelEdit={handleCancelEdit}
+                handleSave={handleSave}
+              />
+            }
           />
           <Route path="/login" element={<LoginPage />} />
           <Route
