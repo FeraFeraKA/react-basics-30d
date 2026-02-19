@@ -1,18 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-const Header = ({ title, userName, toggleLogin, isLoggedIn }) => {
+const Header = ({ title, toggleLogin, isLoggedIn }) => {
   return (
     <header>
       <div className="container">
         <div className="header_info">
           <h1>{title}</h1>
-          <p>Привет, {userName}</p>
+          <p>Реализовано на React + SCSS</p>
         </div>
         <div className="authorization_links">
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
+              isActive ? 'nav-link active' : 'nav-link'
             }
           >
             Home
@@ -21,7 +21,7 @@ const Header = ({ title, userName, toggleLogin, isLoggedIn }) => {
             <NavLink
               to="/login"
               className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
+                isActive ? 'nav-link active' : 'nav-link'
               }
             >
               Login
@@ -31,7 +31,7 @@ const Header = ({ title, userName, toggleLogin, isLoggedIn }) => {
             <NavLink
               to="/profile"
               className={({ isActive }) =>
-                isActive ? "nav-link active" : "nav-link"
+                isActive ? 'nav-link active' : 'nav-link'
               }
             >
               Profile
