@@ -1,84 +1,95 @@
-import { useState } from 'react';
 import { formatDate } from '../utils/formatDate';
 import { validation } from '../utils/validation';
 
 const NoteItem = ({
   note,
-  editingId,
+  editingData,
   deletingId,
   handleEdit,
-  handleCancelEdit,
+  handleEditField,
   handleSave,
   handleDelete,
+  handleCancel,
   setDeletingId,
 }) => {
-  const [title, setTitle] = useState(note.title);
-  const [text, setText] = useState(note.text);
+  if (!note) return null;
+
+  const { id: noteId, title: noteTitle = '', text: noteText = '', tags } = note;
+
+  const noteTags = Array.isArray(tags) ? tags : [];
+
+  const {
+    id: editingId,
+    title: editableTitle = '',
+    text: editableText = '',
+  } = editingData ?? {};
+
+  const isEditing = noteId != null && editingId === noteId;
+
+  const validationErrors = isEditing
+    ? validation({ title: editableTitle, text: editableText, tags: noteTags })
+    : {};
+
+  const isValid = Object.keys(validationErrors).length === 0;
 
   const onSubmit = (e) => {
     e.preventDefault();
-    handleSave(note.id, { title, text });
+    if (noteId == null) return;
+    handleSave(noteId, { title: editableTitle, text: editableText });
   };
-
-  const onCancel = () => {
-    setTitle(note.title);
-    setText(note.text);
-    handleCancelEdit();
-  };
-
-  const validationErrors = validation({
-    title,
-    text,
-    tags: note.tags,
-  });
-
-  const isValid = Object.keys(validationErrors).length === 0;
 
   return (
     <li>
       <div className="note_info">
-        <h3>{note.title}</h3>
-        <h4>{note.text}</h4>
+        <h3>{noteTitle}</h3>
+        <h4>{noteText}</h4>
         <p>Created at: {formatDate(note)}</p>
-        <p>Tags: {note.tags.join(', ')}</p>
-        {Object.entries(validationErrors).map(([field, message]) => (
-          <p key={field}>Error: {message}</p>
-        ))}
-      </div>
-      {deletingId !== note.id ? (
-        <button onClick={() => setDeletingId(note.id)}>Удалить</button>
-      ) : (
-        <div className="confirm">
-          <span>Удалить?</span>
-          <button onClick={() => handleDelete(note.id)}>Да</button>
-          <button onClick={() => setDeletingId(null)}>Нет</button>
-        </div>
-      )}
+        <p>Tags: {noteTags.join(', ')}</p>
 
-      {editingId !== note.id ? (
-        <button onClick={handleEdit}>Редактировать</button>
-      ) : (
-        <form onSubmit={onSubmit} className="note_edit">
-          <input
-            type="text"
-            placeholder="Title..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Text..."
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-          />
-          <button type="submit" disabled={!isValid}>
-            Сохранить
-          </button>
-          <button type="button" onClick={onCancel}>
-            Отменить
-          </button>
-        </form>
-      )}
+        {isEditing &&
+          Object.entries(validationErrors).map(([field, message]) => (
+            <p key={field} style={{ color: 'red' }}>
+              Error: {message}
+            </p>
+          ))}
+      </div>
+
+      <div className="actions">
+        {deletingId !== noteId ? (
+          <button onClick={() => setDeletingId(noteId)}>Delete</button>
+        ) : (
+          <div className="confirm">
+            <span>Remove?</span>
+            <button onClick={handleDelete}>Yes</button>
+            <button onClick={() => setDeletingId(null)}>No</button>
+          </div>
+        )}
+
+        {!isEditing ? (
+          <button onClick={handleEdit}>Edit</button>
+        ) : (
+          <form onSubmit={onSubmit} className="note_edit">
+            <input
+              type="text"
+              placeholder="Title..."
+              value={editableTitle}
+              onChange={(e) => handleEditField('title', e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Text..."
+              value={editableText}
+              onChange={(e) => handleEditField('text', e.target.value)}
+            />
+            <button type="submit" disabled={!isValid}>
+              Save
+            </button>
+            <button type="button" onClick={handleCancel}>
+              Cancel
+            </button>
+          </form>
+        )}
+      </div>
     </li>
   );
 };

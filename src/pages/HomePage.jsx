@@ -1,99 +1,64 @@
 import AddNote from '../components/AddNote';
 import NoteItem from '../components/NoteItem';
 import FilterNote from '../components/FilterNote';
-import { useState, useEffect, useRef } from 'react';
-import { filterNotes } from '../utils/filterNotes';
-import { useDebounce } from '../hooks/useDebounce';
+import DataActions from '../components/DataActions';
 
-const HomePage = ({
-  notes,
-  deleteNote,
-  addNote,
-  editingId,
-  handleEdit,
-  handleCancelEdit,
-  handleSave,
-}) => {
-  const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState('asc');
-  const [sortTags, setSortTags] = useState('');
-  const [onlyUpdated, setOnlyUpdated] = useState(false);
-  const [deletingId, setDeletingId] = useState(null);
+import { useNotes } from '../hooks/useNotes';
 
-  const queryRef = useRef(null);
-
-  useEffect(() => {
-    handleCancelEdit();
-  }, [query, sortTags, sortBy, onlyUpdated, handleCancelEdit]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key !== 'Escape') return;
-
-      if (editingId) {
-        handleCancelEdit();
-        return;
-      }
-
-      if (document.activeElement === queryRef.current) {
-        setQuery('');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [editingId, handleCancelEdit]);
-
-  const debouncedValue = useDebounce(query, 300);
-
-  const filteredNotes = filterNotes(
+const HomePage = () => {
+  const {
+    filteredNotes,
     notes,
-    debouncedValue,
-    sortTags,
-    sortBy,
-    onlyUpdated,
-  );
-
-  const handleDelete = (id) => {
-    deleteNote(id);
-    setDeletingId(null);
-  };
+    filters,
+    editingData,
+    deletingId,
+    queryRef,
+    updateFilter,
+    addNote,
+    handleDelete,
+    startEdit,
+    updateEditingField,
+    handleSave,
+    setEditingData,
+    setDeletingId,
+    handleExport,
+    handleImport,
+    handleResetAll,
+  } = useNotes();
 
   return (
     <div className="container">
       <AddNote addNote={addNote} />
       <FilterNote
         notes={notes}
-        query={query}
+        filters={filters}
+        updateFilter={updateFilter}
         queryRef={queryRef}
-        setQuery={setQuery}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        sortTags={sortTags}
-        setSortTags={setSortTags}
-        onlyUpdated={onlyUpdated}
-        setOnlyUpdated={setOnlyUpdated}
       />
-      <h3>
-        {filteredNotes.length === 0
-          ? 'Ничего не найдено'
-          : `Показано ${filteredNotes.length} из ${notes.length}`}
-      </h3>
+      <div className="notes_info">
+        <h3>
+          {filteredNotes.length === 0
+            ? 'Ничего не найдено'
+            : `Показано ${filteredNotes.length} из ${notes.length}`}
+        </h3>
+        <DataActions
+          handleExport={handleExport}
+          handleImport={handleImport}
+          handleResetAll={handleResetAll}
+        />
+      </div>
       <ul className="notes">
         {filteredNotes.map((note) => (
           <NoteItem
             key={note.id}
             note={note}
-            editingId={editingId}
+            editingData={editingData}
             deletingId={deletingId}
-            handleEdit={() => handleEdit(note.id)}
-            handleCancelEdit={handleCancelEdit}
+            handleEdit={() => startEdit(note)}
+            handleEditField={updateEditingField}
             handleSave={handleSave}
-            deleteNote={() => deleteNote(note.id)}
-            handleDelete={handleDelete}
+            handleDelete={() => handleDelete(note.id)}
+            handleCancel={() => setEditingData(null)}
             setDeletingId={setDeletingId}
           />
         ))}

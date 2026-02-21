@@ -1,18 +1,33 @@
-# React + Vite
+# React Notes App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Первый мой проект, использующий React**
 
-Currently, two official plugins are available:
+## Веб-приложение дневника заметок.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Deploy: https://react-notes-app-d8.vercel.app/
 
-## React Compiler
+## Как запустить
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+1. Клонировать репозиторий.
+2. Установить зависимости с помощью команды **npm install**.
+3. Использовать команду npm run dev.
+4. Перейти по ссылке с localhost.
 
-Note: This will impact Vite dev & build performances.
+## Использованный стек
 
-## Expanding the ESLint configuration
+- Сборщик Vite.
+- Использование React и его составляющих (хуки, controlled inputs, компоненты).
+- Базовая демонстрация React Router.
+- Препроцессор стилей SCSS.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Реализовано:
+
+- Возможность создания заметок с тегами
+- Фильтрация и сортировка
+- Поиск с debounce
+- Возможность экспорта, импорта заметок
+- Загрузка MOK по одной кнопке
+- Возможность CRUD операций с заметкой
+- Подтверждение удаление заметки
+- Переключение страниц через React Router
+- Переадресация на Login Page, если попытаться зайти на Profile без активной авторизации

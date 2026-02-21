@@ -1,17 +1,7 @@
-const FilterState = ({
-  notes,
-  query,
-  queryRef,
-  setQuery,
-  sortBy,
-  setSortBy,
-  sortTags,
-  setSortTags,
-  onlyUpdated,
-  setOnlyUpdated,
-}) => {
-  const allTags = notes.flatMap((note) => note.tags);
-  const uniqueTags = [...new Set(allTags)];
+import { getUniqueTags } from '../utils/getUniqueTags';
+
+const FilterState = ({ notes, filters, updateFilter, queryRef }) => {
+  const uniqueTags = getUniqueTags(notes);
 
   return (
     <>
@@ -22,14 +12,14 @@ const FilterState = ({
             type="text"
             placeholder="Type query..."
             ref={queryRef}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={filters.query}
+            onChange={(e) => updateFilter('query', e.target.value)}
           />
-          {query !== '' && (
+          {filters.query !== '' && (
             <button
               type="button"
               onClick={() => {
-                setQuery('');
+                updateFilter('query', '');
               }}
               className="button_clear"
             >
@@ -37,13 +27,19 @@ const FilterState = ({
             </button>
           )}
         </div>
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <select
+          value={filters.sortBy}
+          onChange={(e) => updateFilter('sortBy', e.target.value)}
+        >
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
           <option value="title_asc">Title ascending</option>
           <option value="title_desc">Title descending</option>
         </select>
-        <select value={sortTags} onChange={(e) => setSortTags(e.target.value)}>
+        <select
+          value={filters.sortTags}
+          onChange={(e) => updateFilter('sortTags', e.target.value)}
+        >
           <option value="">All tags</option>
           {uniqueTags.map((tag) => (
             <option key={tag} value={tag}>
@@ -54,8 +50,8 @@ const FilterState = ({
         <label>
           <input
             type="checkbox"
-            checked={onlyUpdated}
-            onChange={(e) => setOnlyUpdated(e.target.checked)}
+            checked={filters.onlyUpdated}
+            onChange={(e) => updateFilter('onlyUpdated',e.target.checked)}
           />
           <span>Only Updated</span>
         </label>

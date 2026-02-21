@@ -80,6 +80,7 @@ select {
   border: 2px solid #770e0e;
   border-radius: 10px;
   padding: 12px;
+  appearance: none;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -221,6 +222,16 @@ main .container > h3 {
   justify-content: center;
   align-items: center;
 
+  input {
+    &:hover {
+      transform: unset;
+    }
+
+    &:focus {
+      box-shadow: unset;
+    }
+  }
+
   span {
     min-width: 0;
   }
@@ -249,6 +260,14 @@ main .container > h3 {
   &:hover {
     box-shadow: unset;
   }
+}
+
+.notes_info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .notes {
@@ -294,6 +313,10 @@ main .container > h3 {
 
 .note_edit > * {
   margin: 12px 0;
+}
+
+.confirm button {
+  margin-right: 0;
 }
 
 footer {

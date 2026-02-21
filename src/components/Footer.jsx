@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer>
       <div className="container">
-        <p>© {year}</p>
+        <p>&copy; {year}</p>
       </div>
     </footer>
   );
